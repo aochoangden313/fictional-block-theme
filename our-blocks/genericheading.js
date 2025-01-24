@@ -1,20 +1,48 @@
+import { ToolbarGroup, ToolbarButton } from "@wordpress/components"
 import { registerBlockType } from "@wordpress/blocks"
+import { RichText, BlockControls } from "@wordpress/block-editor"
 
 registerBlockType("ourblocktheme/genericheading", {
-    title: "Genericheading",
-    edit: Editcomponent,
-    save: SaveCombonent
+    title: "Generic Heading",
+    attributes: {
+        text: { type: "string" },
+        size: { type: "string", default: "large" }
+    },
+    edit: EditComponent,
+    save: SaveComponent
 })
 
-function Editcomponent() {
-   
+function EditComponent(props) {
+    function handleTextChange(x) {
+        props.setAttributes({ text: x })
+    }
+
     return (
-        <div>Hello</div>
+        <>
+            <BlockControls>
+                <ToolbarGroup>
+                    <ToolbarButton isPressed={props.attributes.size === "large"} onClick={() => props.setAttributes({ size: "large" })}>Large</ToolbarButton>
+                    <ToolbarButton isPressed={props.attributes.size === "medium"} onClick={() => props.setAttributes({ size: "medium" })}>Medium</ToolbarButton>
+                    <ToolbarButton isPressed={props.attributes.size === "small"} onClick={() => props.setAttributes({ size: "small" })}>Small</ToolbarButton>
+                </ToolbarGroup>
+            </BlockControls>
+            <RichText allowedFormat={["core/bold"]} tagName="h1" className={`headline headline--${props.attributes.size}`} value={props.attributes.text} onChange={handleTextChange} />
+        </>
     )
 }
 
-function SaveCombonent() {
-    return (
-        <div>This is our heading</div>
-    )
+function SaveComponent(props) {
+
+    function createTagName() {
+        switch (props.attributes.size) {
+            case "large":
+                return "h1"
+            case "medium":
+                return "h2"
+            case "small":
+                return "h3"
+        }
+    }
+
+    return <RichText.Content tagName={createTagName()} value={props.attributes.text} className={`headline headline--${props.attributes.size}`} />
 }
