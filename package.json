@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "wp-scripts build src/index.js our-blocks/banner.js our-blocks/genericheading.js",
-    "start": "wp-scripts start src/index.js our-blocks/banner.js our-blocks/genericheading.js",
+    "build": "wp-scripts build src/index.js our-blocks/banner.js our-blocks/genericheading.js our-blocks/genericbutton.js",
+    "start": "wp-scripts start src/index.js our-blocks/banner.js our-blocks/genericheading.js our-blocks/genericbutton.js",
     "dev": "wp-scripts start",
     "devFast": "wp-scripts start",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -22,6 +22,7 @@
   "devDependencies": {
     "@babel/core": "^7.26.0",
     "@babel/preset-react": "^7.26.3",
+    "@wordpress/icons": "^10.17.0",
     "babel-loader": "^9.2.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
