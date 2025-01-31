@@ -1,7 +1,7 @@
 import { link } from "@wordpress/icons"
-import { ToolbarGroup, ToolbarButton, Popover, Button } from "@wordpress/components"
+import { ToolbarGroup, ToolbarButton, Popover, Button, PanelBody, PanelRow, ColorPalette } from "@wordpress/components"
 import { registerBlockType } from "@wordpress/blocks"
-import { RichText, BlockControls, __experimentalLinkControl as LinkControl } from "@wordpress/block-editor"
+import { RichText, InspectorControls, BlockControls, __experimentalLinkControl as LinkControl } from "@wordpress/block-editor"
 import { useState } from "@wordpress/element"
 
 registerBlockType("ourblocktheme/genericbutton", {
@@ -9,7 +9,8 @@ registerBlockType("ourblocktheme/genericbutton", {
     attributes: {
         text: { type: "string" },
         size: { type: "string", default: "large" },
-        linkObject: { type: "object" }
+        linkObject: { type: "object", default: {url: ""} },
+        colorName: {type: "string"}
     },
     edit: EditComponent,
     save: SaveComponent
@@ -24,6 +25,16 @@ function EditComponent(props) {
 
     function handleLinkChange(newLink) {
         props.setAttributes({linkObject: newLink})
+    }
+
+    const ourColors = [
+        {name: "blue", color: "#0d3b66"},
+        {name: "orange", color: "#ee964b"},
+        {name: "dark-orange", color: "#f95738"},
+    ]
+
+    function handleColorChange(colorCode) {
+        props.setAttributes({colorName: colorCode});
     }
 
     function buttonHandler() {
@@ -42,6 +53,13 @@ function EditComponent(props) {
                     <ToolbarButton isPressed={props.attributes.size === "small"} onClick={() => props.setAttributes({ size: "small" })}>Small</ToolbarButton>
                 </ToolbarGroup>
             </BlockControls>
+            <InspectorControls>
+                <PanelBody title="Color" initialOpen={true}>
+                    <PanelRow>
+                        <ColorPalette colors={ourColors} value={props.attributes.colorName} onChange={handleColorChange}/>
+                    </PanelRow>
+                </PanelBody>
+            </InspectorControls>
             <RichText allowedFormat={[]} tagName="a" className={`btn btn--${props.attributes.size} btn--blue`} value={props.attributes.text} onChange={handleTextChange} />
             {isLinkPickerVisible && (
                 <Popover position="middle center">
